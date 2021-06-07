@@ -1,0 +1,19 @@
+bfloat16_fma:skywater:
+  image: etalian/skywater-pdk
+  variables:
+    DESIGN: bfloat16_fma
+  before_script:
+    - OPENLANE_DESIGN_DIR=${OPENLANE_ROOT}/designs/${DESIGN}
+    - mkdir -p ${OPENLANE_DESIGN_DIR}/src
+    - cp -rv scripts/openlane/. ${OPENLANE_DESIGN_DIR}
+    - cp -rv extras/HardFloat-1/source/. ${OPENLANE_DESIGN_DIR}/src
+    - cp -rv extras/HardFloat-1/source/RISCV/HardFloat_specialize.vi ${OPENLANE_DESIGN_DIR}/src
+    - cp -rv sources/hw/. ${OPENLANE_DESIGN_DIR}/src
+  script:
+    - cd ${OPENLANE_ROOT}
+    - ./flow.tcl -design ${DESIGN}
+  after_script:
+    - cp -r ${OPENLANE_ROOT}/designs/${DESIGN}/runs .
+  artifacts:
+    paths:
+      - runs
