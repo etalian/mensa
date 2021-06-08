@@ -1,0 +1,10 @@
+caravel:
+  image: etalian/skywater-pdk
+  before_script:
+    - make install
+  script:
+    - cd verilog/dv/la_test2
+    - make
+  artifacts:
+    paths:
+      - verilog/dv/la_test2
