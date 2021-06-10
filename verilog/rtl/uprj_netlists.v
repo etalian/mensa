@@ -13,7 +13,7 @@
 // limitations under the License.
 // SPDX-License-Identifier: Apache-2.0
 
-// Include caravel global defines for the number of the user project IO pads 
+// Include caravel global defines for the number of the user project IO pads
 `include "defines.v"
 `define USE_POWER_PINS
 
@@ -24,5 +24,12 @@
     `include "gl/user_proj_example.v"
 `else
     `include "user_project_wrapper.v"
-    `include "user_proj_example.v"
+    `include "bfloat16_fma.v"
+    `include "bfloat16_fma_wb.v"
+    `include "fNToRecFN.v"
+    `include "recFNToFN.v"
+    `include "mulAddRecFN.v"
+    `include "isSigNaNRecFN.v"
+    `include "HardFloat_primitives.v"
+    `include "HardFloat_rawFN.v"
 `endif

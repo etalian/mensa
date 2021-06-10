@@ -1,10 +1,10 @@
-caravel:
+bfloat16_fma:
   image: etalian/skywater-pdk
   before_script:
     - make install
   script:
-    - cd verilog/dv/la_test2
+    - cd verilog/dv/bfloat16_fma
     - make
   artifacts:
     paths:
-      - verilog/dv/la_test2
+      - verilog/dv/bfloat16_fma
