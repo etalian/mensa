@@ -55,6 +55,11 @@ module wrapped_project(
     wire [`MPRJ_IO_PADS-1:0] buf_io_oeb;
     wire [2:0] buf_irq;
 
+    wire valid;
+
+    wire [9:0] exceptionFlags;
+    wire [31:0] out;
+
     `ifdef FORMAL
     // formal can't deal with z, so set all outputs to 0 if not active
     assign wbs_ack_o    = active ? buf_wbs_ack_o    : 1'b0;
@@ -77,9 +82,25 @@ module wrapped_project(
     // permanently set oeb so that outputs are always enabled: 0 is output, 1 is high-impedance
     assign buf_io_oeb = {`MPRJ_IO_PADS{1'b0}};
 
-    // Instantiate your module here, 
-    // connecting what you need of the above signals. 
-    // Use the buffered outputs for your module's outputs.
+    assign valid = wbs_cyc_i && wbs_stb_i;
+
+    bfloat16_fma_wb fma_wb (
+        .clk(wb_clk_i),
+        .reset(wb_rst_i),
+        .ready(buf_wbs_ack_o),
+        .valid(valid),
+        .addr(wbs_adr_i),
+        .rdata(buf_wbs_dat_o),
+        .wdata(wbs_dat_i),
+        .wstrb(wbs_sel_i & {4{wbs_we_i}}),
+        .la_write(~la_oenb[31:0] & ~{32{valid}}),
+        .la_input(la_data_in[31:0] & 32'h3FFFFFFF),
+        .exceptionFlags(exceptionFlags),
+        .out(out)
+    );
+
+    assign buf_io_out[31:0] = out;
+    assign buf_io_out[36:32] = buf_io_out[9:5] | buf_io_out[4:0];
 
 endmodule 
 `default_nettype wire

@@ -5,10 +5,17 @@ mode prove
 smtbmc
 
 [script]
-read -formal wrapper.v rest of your source files.v
+read -formal wrapper.v properties.v bfloat16_fma_wb.v user_project/sources/hw/bfloat16_fma.v user_project/extras/HardFloat-1/sources/fNToRecFN.v user_project/extras/HardFloat-1/sources/recFNToFN.v user_project/extras/HardFloat-1/sources/mulAddRecFN.v user_project/extras/HardFloat-1/sources/isSigNaNRecFN.v user_project/extras/HardFloat-1/sources/HardFloat_primitives.v user_project/extras/HardFloat-1/sources/HardFloat_rawFN.v
 prep -top wrapped_project
 
 [files]
 wrapper.v
 properties.v
-rest of your source files.v
+bfloat16_fma_wb.v
+user_project/sources/hw/bfloat16_fma.v
+user_project/extras/HardFloat-1/sources/fNToRecFN.v
+user_project/extras/HardFloat-1/sources/recFNToFN.v
+user_project/extras/HardFloat-1/sources/mulAddRecFN.v
+user_project/extras/HardFloat-1/sources/isSigNaNRecFN.v
+user_project/extras/HardFloat-1/sources/HardFloat_primitives.v
+user_project/extras/HardFloat-1/sources/HardFloat_rawFN.v

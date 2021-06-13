@@ -6,7 +6,14 @@ set ::env(DESIGN_NAME) project_name
 
 # add your source files here
 set ::env(VERILOG_FILES) "$::env(DESIGN_DIR)/wrapper.v \
-    $::env(DESIGN_DIR)/other source files.v"
+  $::env(DESIGN_DIR)/bfloat16_fma_wb.v \
+  $::env(DESIGN_DIR)/user_project/sources/hw/bfloat16_fma.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/fNToRecFN.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/recFNToFN.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/mulAddRecFN.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/isSigNaNRecFN.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/HardFloat_primitives.v \
+  $::env(DESIGN_DIR)/user_project/extras/HardFloat-1/sources/HardFloat_rawFN.v"
 
 # target density, change this if you can't get your design to fit
 set ::env(PL_TARGET_DENSITY) 0.4

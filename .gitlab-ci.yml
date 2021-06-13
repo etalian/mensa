@@ -1,0 +1,16 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+test-caravel:
+  image: etalian/skywater-pdk
+  before_script:
+    - git clone https://github.com/mattvenn/multi_project_tools /tmp/multi_project_tools
+    - git clone -b mpw-two-c https://github.com/efabless/caravel_user_project /tmp/caravel_user_project
+    - ( cd /tmp/caravel_user_project && make install )
+    # TODO: do we actually need to install netgen from git?
+    - yum install -y python3-devel
+    - pip3 install gdspy PyYAML cocotb
+    # multi_tools does not support relative paths, therefore we have to force absolute ones
+    - ln -s "${PWD}" /tmp/bfloat16_fma
+  script:
+    - ( cd /tmp/multi_project_tools/ && ./multi_tool.py --config /tmp/bfloat16_fma/projects.yaml --test-caravel --force-delete )

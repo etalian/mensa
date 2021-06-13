@@ -1,12 +1,12 @@
---- 
+---
 # information
-project: 
-  title: "title"
-  description: "description"
+project:
+  title: "bfloat16_fma"
+  description: "dual bfloat16 fused multiply-add"
   picture: docs/empty.png
   author: "Author"
-  github: https://github.com/link
-  license: LICENSE
+  github: https://github.com/etalian/mensa
+  license: BSD-3-Clause
 
 # test within caravel
 caravel_test:
@@ -18,8 +18,8 @@ caravel_test:
 
 # module test
 module_test:
-  recipe: "all" 
-  directory: "project directory"
+  recipe: "test-level1"
+  directory: "user_project/extras/HardFloat-1/test/build/IcarusVerilog"
   makefile: "Makefile"
 
 # run the wrapper formal proof
@@ -33,8 +33,15 @@ openlane:
 
 # source required for various configs and module instantiation
 source:
-    - wrapper.v
-    - other source files here
+  - wrapper.v
+  - bfloat16_fma_wb.v
+  - user_project/sources/hw/bfloat16_fma.v
+  - user_project/extras/HardFloat-1/source/fNToRecFN.v
+  - user_project/extras/HardFloat-1/source/recFNToFN.v
+  - user_project/extras/HardFloat-1/source/mulAddRecFN.v
+  - user_project/extras/HardFloat-1/source/isSigNaNRecFN.v
+  - user_project/extras/HardFloat-1/source/HardFloat_primitives.v
+  - user_project/extras/HardFloat-1/source/HardFloat_rawFN.v
 
 # gds - check size = 300x300, nothing on metal 5, do a DRC, check 141 tristate buffers, check LVS
 gds:
