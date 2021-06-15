@@ -39,3 +39,20 @@ test-caravel:
     - ln -s "${PWD}" /tmp/bfloat16_fma
   script:
     - ( cd /tmp/multi_project_tools/ && ./multi_tool.py --config /tmp/bfloat16_fma/projects.yaml --test-caravel --force-delete )
+
+harden-caravel:
+  image: etalian/skywater-pdk
+  before_script:
+    - rm -rf "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    - mkdir -p "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    - cp -rv "${PWD}/." "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    # there is apparently no way to specify an include path?
+    - ( cd ${OPENLANE_ROOT}/designs/bfloat16_fma/user_project/ && cp "extras/HardFloat-1/source/HardFloat_consts.vi" "sources/hw/" )
+    - ( cd ${OPENLANE_ROOT}/designs/bfloat16_fma/user_project/extras/HardFloat-1/source/ && cp RISCV/HardFloat_specialize.vi ./ )
+  script:
+    - ( cd ${OPENLANE_ROOT} && ./flow.tcl -design bfloat16_fma )
+  after_script:
+    - cp -r ${OPENLANE_ROOT}/designs/bfloat16_fma/runs .
+  artifacts:
+    paths:
+      - runs

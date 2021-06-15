@@ -9,7 +9,6 @@ module bfloat16_fma_wb (
   input  [31:0] la_input,
   output ready,
   output [31:0] rdata,
-  //output [31:0] count,
 
   output [9:0]  exceptionFlags,
   output [31:0] out
@@ -18,8 +17,6 @@ module bfloat16_fma_wb (
   wire [9:0]  tmpExceptionFlags;
 
   reg ready;
-  ///reg [BITS-1:0] count;
-  //reg [BITS-1:0] rdata;
   reg [31:0] rdata;
 
   reg [1:0]  regControl;
@@ -33,7 +30,6 @@ module bfloat16_fma_wb (
 
   always @(posedge clk) begin
     if (reset) begin
-      //count <= 0;
       ready <= 0;
       rdata <= 0;
 
@@ -51,12 +47,12 @@ module bfloat16_fma_wb (
       if (valid && !ready) begin
         ready <= 1'b1;
 
-        case (addr) // 0x30000000
+        case (addr)
           32'h3000_0000: begin //ctrl1/ctrl2
             rdata[0] <= regControl[0];
             rdata[16] <= regControl[1];
             if (wstrb[0]) regControl[0]  <= wdata[0];
-            if (wstrb[2]) regControl[16] <= wdata[16];
+            if (wstrb[2]) regControl[1] <= wdata[16];
           end
           32'h3000_0004: begin //op1/op2
             rdata[1:0] <= regOp[1:0];
