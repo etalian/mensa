@@ -6,7 +6,7 @@ smtbmc
 
 [script]
 read -formal wrapper.v bfloat16_fma_wb.v bfloat16_fma.v fNToRecFN.v recFNToFN.v mulAddRecFN.v isSigNaNRecFN.v HardFloat_primitives.v HardFloat_rawFN.v HardFloat_consts.vi HardFloat_localFuncs.vi HardFloat_specialize.vi
-prep -top wrapped_project
+prep -top wrapped_bfloat16
 
 [files]
 wrapper.v
