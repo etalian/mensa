@@ -11,10 +11,10 @@ project:
 # test within caravel
 caravel_test:
   recipe: "coco_test"
-  directory: "caravel_test"
+  directory: "caravel_test_bfloat16"
   id: 14
-  module_name: "wrapped_project"
-  instance_name: "wrapped_project"
+  module_name: "wrapped_bfloat16"
+  instance_name: "wrapped_bfloat16"
 
 # module test
 module_test:
