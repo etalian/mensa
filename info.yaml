@@ -3,7 +3,7 @@
 project:
   title: "bfloat16_fma"
   description: "dual bfloat16 fused multiply-add"
-  picture: gds/wrapped_project.gds.png
+  picture: gds/wrapped_bfloat16.gds.png
   author: "Author"
   github: https://github.com/etalian/mensa
   license: BSD-3-Clause
@@ -46,6 +46,6 @@ source:
 # gds - check size = 300x300, nothing on metal 5, do a DRC, check 141 tristate buffers, check LVS
 gds:
   directory: "gds"
-  gds_filename: "wrapped_project.gds"
-  lvs_filename: "wrapped_project.lvs.powered.v"
-  lef_filename: "wrapped_project.lef"
+  gds_filename: "wrapped_bfloat16.gds"
+  lvs_filename: "wrapped_bfloat16.lvs.powered.v"
+  lef_filename: "wrapped_bfloat16.lef"
