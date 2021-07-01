@@ -4,7 +4,7 @@ project:
   title: "bfloat16_fma"
   description: "dual bfloat16 fused multiply-add"
   picture: gds/wrapped_bfloat16.gds.png
-  author: "Author"
+  author: "Paolo Durante"
   github: https://github.com/etalian/mensa
   license: BSD-3-Clause
 
