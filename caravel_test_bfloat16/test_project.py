@@ -29,7 +29,7 @@ async def test_active(dut):
   dut._log.info("Waiting for active...")
 
   # wait with a timeout for the project to become active
-  await with_timeout(RisingEdge(dut.uut.mprj.wrapped_bfloat16.active), 1800, 'us')
+  await with_timeout(RisingEdge(dut.uut.mprj.wrapped_bfloat16_14.active), 1800, 'us')
 
   dut._log.info("Project activated");
 
@@ -41,10 +41,10 @@ async def test_wb(dut):
   for i in range(100000):
     await ClockCycles(dut.clk, 1)
 
-    wbs_adr_i = int(dut.uut.mprj.wrapped_bfloat16.wbs_adr_i.value)
-    wbs_dat_o = int(dut.uut.mprj.wrapped_bfloat16.wbs_dat_o.value)
-    wbs_ack_o = int(dut.uut.mprj.wrapped_bfloat16.wbs_ack_o.value)
-    wbs_dat_i = int(dut.uut.mprj.wrapped_bfloat16.wbs_dat_i.value)
+    wbs_adr_i = int(dut.uut.mprj.wrapped_bfloat16_14.wbs_adr_i.value)
+    wbs_dat_o = int(dut.uut.mprj.wrapped_bfloat16_14.wbs_dat_o.value)
+    wbs_ack_o = int(dut.uut.mprj.wrapped_bfloat16_14.wbs_ack_o.value)
+    wbs_dat_i = int(dut.uut.mprj.wrapped_bfloat16_14.wbs_dat_i.value)
 
     regs = {
       0x30000000: "CTRL",
