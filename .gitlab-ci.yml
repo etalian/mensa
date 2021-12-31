@@ -1,5 +1,5 @@
 bfloat16_fma:skywater:
-  image: etalian/skywater-pdk:mpw2
+  image: etalian/skywater-pdk:mpw4
   variables:
     DESIGN: bfloat16_fma
   before_script:
