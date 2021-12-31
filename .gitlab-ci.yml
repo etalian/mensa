@@ -1,0 +1,67 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  MATT_MPT_REF: mpw2-rerun
+
+prove-wrapper:
+  image: etalian/skywater-pdk:mpw4
+  before_script:
+    - . /opt/rh/rh-git227/enable
+    - yum install -y rh-python38 gcc gcc-c++ rh-python38-python-devel
+    - . /opt/rh/rh-python38/enable
+    - ( git clone -n https://github.com/mattvenn/multi_project_tools /tmp/multi_project_tools && cd $_ && git checkout ${MATT_MPT_REF} && pip3 install -r requirements.txt )
+    # multi_tools does not support relative paths, therefore we have to force absolute ones
+    - ln -s "${PWD}" /tmp/bfloat16_fma
+  script:
+    - ( cd /tmp/multi_project_tools/ && ./multi_tool.py --config /tmp/bfloat16_fma/projects.yaml --prove-wrapper --force-delete )
+
+test-module:
+  image: etalian/skywater-pdk:mpw4
+  before_script:
+    - . /opt/rh/rh-git227/enable
+    - yum install -y rh-python38 gcc gcc-c++ rh-python38-python-devel
+    - . /opt/rh/rh-python38/enable
+    - ( git clone -n https://github.com/mattvenn/multi_project_tools /tmp/multi_project_tools && cd $_ && git checkout ${MATT_MPT_REF} && pip3 install -r requirements.txt )
+    - git clone https://github.com/ucb-bar/berkeley-softfloat-3 /tmp/berkeley-softfloat-3
+    - make -C /tmp/berkeley-softfloat-3/build/Linux-x86_64-GCC
+    - git clone https://github.com/ucb-bar/berkeley-testfloat-3 /tmp/berkeley-testfloat-3
+    - make -C /tmp/berkeley-testfloat-3/build/Linux-x86_64-GCC
+    - ln -s /tmp/berkeley-testfloat-3/build/Linux-x86_64-GCC/testfloat_gen /usr/local/bin
+    # multi_tools does not support relative paths, therefore we have to force absolute ones
+    - ln -s "${PWD}" /tmp/bfloat16_fma
+  script:
+    - ( cd /tmp/multi_project_tools/ && ./multi_tool.py --config /tmp/bfloat16_fma/projects.yaml --test-module --force-delete )
+
+test-caravel:
+  image: etalian/skywater-pdk:mpw4
+  allow_failure: true
+  before_script:
+    - . /opt/rh/rh-git227/enable
+    - yum install -y rh-python38 gcc gcc-c++ rh-python38-python-devel
+    - . /opt/rh/rh-python38/enable
+    - ( git clone -n https://github.com/mattvenn/multi_project_tools /tmp/multi_project_tools && cd $_ && git checkout ${MATT_MPT_REF} && pip3 install -r requirements.txt )
+    - git clone -b mpw-3 https://github.com/efabless/caravel_user_project /tmp/caravel_user_project
+    - ( cd /tmp/caravel_user_project && make install )
+    # multi_tools does not support relative paths, therefore we have to force absolute ones
+    - ln -s "${PWD}" /tmp/bfloat16_fma
+  script:
+    - ( cd /tmp/multi_project_tools/ && ./multi_tool.py --config /tmp/bfloat16_fma/projects.yaml --test-caravel --force-delete )
+
+harden-caravel:
+  image: etalian/skywater-pdk:mpw4
+  before_script:
+    - . /opt/rh/rh-git227/enable
+    - ( git clone -n https://github.com/mattvenn/multi_project_tools /tmp/multi_project_tools && cd $_ && git checkout ${MATT_MPT_REF} )
+    - rm -rf "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    - mkdir -p "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    - cp -rv "${PWD}/." "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    - cp /tmp/multi_project_tools/pin_order.cfg "${OPENLANE_ROOT}/designs/bfloat16_fma"
+    # there is apparently no way to specify an include path?
+    - ( cd ${OPENLANE_ROOT}/designs/bfloat16_fma/user_project/ && cp "extras/HardFloat-1/source/HardFloat_consts.vi" "sources/hw/" )
+    - ( cd ${OPENLANE_ROOT}/designs/bfloat16_fma/user_project/extras/HardFloat-1/source/ && cp RISCV/HardFloat_specialize.vi ./ )
+  script:
+    - ( cd ${OPENLANE_ROOT} && ./flow.tcl -design bfloat16_fma )
+  after_script:
+    - cp -r ${OPENLANE_ROOT}/designs/bfloat16_fma/runs .
+  artifacts:
+    paths:
+      - runs

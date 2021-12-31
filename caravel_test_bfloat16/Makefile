@@ -54,8 +54,10 @@ coco_test: ${PATTERN}.hex
 	iverilog -o sim_build/sim.vvp -s project_tb project_tb.v -DSIM -DFUNCTIONAL \
 	-I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
-	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH)
-	
+	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH) -I $(UPRJ_VERILOG_PATH) \
+	-I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/sources/hw \
+	-I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/extras/HardFloat-1/source -I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/extras/HardFloat-1/source/RISCV
+
 	MODULE=test_project vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp
 	! grep failure results.xml
 
@@ -63,13 +65,15 @@ coco_test: ${PATTERN}.hex
 ifeq ($(SIM),RTL)
 	iverilog -DFUNCTIONAL -DSIM -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
-	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH) \
-	$< -o $@ 
-else  
+	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH) -I $(UPRJ_VERILOG_PATH) \
+	-I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/sources/hw \
+	-I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/extras/HardFloat-1/source -I $(UPRJ_RTL_PATH)/bfloat16_fma/user_project/extras/HardFloat-1/source/RISCV \
+	$< -o $@
+else
 	iverilog -DFUNCTIONAL -DSIM -DGL -I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) -I $(CARAVEL_VERILOG_PATH) \
 	-I $(UPRJ_BEHAVIOURAL_MODELS) -I$(UPRJ_RTL_PATH)   -I $(UPRJ_VERILOG_PATH) \
-	$< -o $@ 
+	$< -o $@
 endif
 
 %.vcd: %.vvp

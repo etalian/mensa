@@ -1,11 +1,12 @@
---- 
+---
 # information
-project: 
-  title: "title"
-  description: "description"
-  picture: docs/empty.png
-  author: "Author"
-  license: LICENSE
+project:
+  title: "bfloat16_fma"
+  description: "dual bfloat16 fused multiply-add"
+  picture: gds/wrapped_bfloat16.gds.png
+  author: "Paolo Durante"
+  github: https://github.com/etalian/mensa
+  license: BSD-3-Clause
 
 # optional interfaces you want to use: gpio, la1, la2, la3, irq, clk2, wishbone & openram
 interfaces: ['la1', 'gpio']
@@ -13,14 +14,15 @@ interfaces: ['la1', 'gpio']
 # test within caravel
 caravel_test:
   recipe: "coco_test"
-  directory: "caravel_test"
-  id: 1
-  module_name: "wrapped_project"
+  directory: "caravel_test_bfloat16"
+  id: 14
+  module_name: "wrapped_bfloat16"
+  instance_name: "wrapped_bfloat16"
 
 # module test
 module_test:
-  recipe: "all" 
-  directory: "project directory"
+  recipe: "test-level1-mulAddRecF16_mul"
+  directory: "user_project/extras/HardFloat-1/test/build/IcarusVerilog"
   makefile: "Makefile"
 
 # run the wrapper formal proof
@@ -34,12 +36,19 @@ openlane:
 
 # source required for various configs and module instantiation
 source:
-    - wrapper.v
-    - other source files here
+  - wrapper.v
+  - bfloat16_fma_wb.v
+  - user_project/sources/hw/bfloat16_fma.v
+  - user_project/extras/HardFloat-1/source/fNToRecFN.v
+  - user_project/extras/HardFloat-1/source/recFNToFN.v
+  - user_project/extras/HardFloat-1/source/mulAddRecFN.v
+  - user_project/extras/HardFloat-1/source/isSigNaNRecFN.v
+  - user_project/extras/HardFloat-1/source/HardFloat_primitives.v
+  - user_project/extras/HardFloat-1/source/HardFloat_rawFN.v
 
 # gds - check nothing on metal 5, DRC & LVS
 gds:
   directory: "gds"
-  gds_filename: "project.gds"
-  lvs_filename: "project.lvs.powered.v"
-  lef_filename: "project.lef"
+  gds_filename: "wrapped_bfloat16.gds"
+  lvs_filename: "wrapped_bfloat16.lvs.powered.v"
+  lef_filename: "wrapped_bfloat16.lef"

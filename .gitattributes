@@ -1,0 +1,4 @@
+*.png binary
+*.gds binary
+*.lvs.powered.v binary
+*.lef binary

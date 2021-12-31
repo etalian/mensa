@@ -5,10 +5,20 @@ mode prove
 smtbmc
 
 [script]
-read -formal wrapper.v rest of your source files.v
-prep -top wrapped_project
+read -formal wrapper.v bfloat16_fma_wb.v bfloat16_fma.v fNToRecFN.v recFNToFN.v mulAddRecFN.v isSigNaNRecFN.v HardFloat_primitives.v HardFloat_rawFN.v HardFloat_consts.vi HardFloat_localFuncs.vi HardFloat_specialize.vi
+prep -top wrapped_bfloat16
 
 [files]
 wrapper.v
 properties.v
-rest of your source files.v
+bfloat16_fma_wb.v
+user_project/sources/hw/bfloat16_fma.v
+user_project/extras/HardFloat-1/source/fNToRecFN.v
+user_project/extras/HardFloat-1/source/recFNToFN.v
+user_project/extras/HardFloat-1/source/mulAddRecFN.v
+user_project/extras/HardFloat-1/source/isSigNaNRecFN.v
+user_project/extras/HardFloat-1/source/HardFloat_primitives.v
+user_project/extras/HardFloat-1/source/HardFloat_rawFN.v
+user_project/extras/HardFloat-1/source/HardFloat_consts.vi
+user_project/extras/HardFloat-1/source/HardFloat_localFuncs.vi
+user_project/extras/HardFloat-1/source/RISCV/HardFloat_specialize.vi
